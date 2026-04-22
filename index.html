@@ -3,301 +3,186 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>KANE Fashion</title>
-
-<link rel="icon" href="https://i.postimg.cc/23JzWhPg/logo.png">
+<title>KANE FASHION</title>
 
 <style>
-body{margin:0;font-family:sans-serif;background:#f5f5f5}
+body{
+margin:0;
+font-family:Arial;
+background:#fff;
+}
 
 /* HEADER */
 header{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:10px 20px;
-    background:#000;
-    color:#fff;
-}
-
-header img{
-    height:50px;
-    object-fit:contain;
-    filter:drop-shadow(0 2px 5px rgba(0,0,0,0.5));
-}
-
-header button{
-    background:transparent;
-    border:1px solid #fff;
-    color:#fff;
-    padding:8px 12px;
-    border-radius:5px;
-    cursor:pointer;
-}
-
-header button:hover{
-    background:#fff;
-    color:#000;
+position:fixed;
+top:0;
+width:100%;
+background:#fff;
+display:flex;
+justify-content:space-between;
+padding:15px;
+border-bottom:1px solid #ddd;
+z-index:1000;
 }
 
 /* GRID */
-.container{
-    padding:20px;
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:15px;
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+padding:100px 20px;
 }
 
-/* CARD */
 .card{
-    background:#fff;border-radius:10px;overflow:hidden;
-    box-shadow:0 5px 10px rgba(0,0,0,0.1);
+background:#fff;
+padding:10px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
 }
-.card img{width:100%;height:140px;object-fit:cover}
-.card-content{padding:10px;text-align:center}
-button{cursor:pointer}
+
+.card img{
+width:100%;
+height:200px;
+object-fit:cover;
+}
 
 /* PANIER */
 .cart-btn{
-    position:fixed;bottom:20px;right:20px;
-    background:#000;color:#fff;padding:15px;border-radius:50%;
+position:fixed;
+bottom:20px;
+right:20px;
+background:gold;
+padding:15px;
+border-radius:50%;
 }
+
 .cart{
-    position:fixed;right:-350px;top:0;width:320px;height:100%;
-    background:#fff;padding:15px;transition:0.3s;overflow:auto;
+position:fixed;
+right:20px;
+bottom:80px;
+background:#fff;
+padding:15px;
+display:none;
+width:300px;
 }
-.cart.active{right:0}
-.cart-item{border-bottom:1px solid #ddd;padding:10px 0}
 
-/* ADMIN */
-.admin{
-    display:none;
-    padding:20px;
-    background:#fff;
-}
-input{padding:8px;margin:5px;width:90%}
-
-/* BUTTONS */
-.pay-btn{width:100%;padding:10px;margin-top:10px;border:none;color:#fff}
-.wave{background:#00AEEF}
-.orange{background:#FF6600}
-.whatsapp{background:#25D366}
+.cart.active{display:block;}
 </style>
 </head>
 
 <body>
 
 <header>
-
-<!-- LOGO -->
 <img src="https://i.postimg.cc/23JzWhPg/logo.png" alt="KANE Fashion">
-
-<!-- MENU -->
-<div>
-<button onclick="showShop()">Boutique</button>
-<button onclick="showAdmin()">Admin</button>
-</div>
-
+<h2>KANE FASHION</h2>
 </header>
 
-<!-- SHOP -->
-<div id="shop">
-<div class="container" id="products"></div>
-</div>
+<div class="products" id="products"></div>
 
-<!-- ADMIN -->
-<div class="admin" id="admin">
-<h2>Dashboard Admin</h2>
+<div class="cart-btn" onclick="toggleCart()">🛒 <span id="count">0</span></div>
 
-<input type="text" id="name" placeholder="Nom produit">
-<input type="number" id="price" placeholder="Prix">
-<input type="text" id="img" placeholder="URL image">
-
-<button onclick="addProduct()">Ajouter produit</button>
-
-<h3>Produits</h3>
-<div id="admin-products"></div>
-
-<h3>Commandes</h3>
-<div id="orders"></div>
-</div>
-
-<!-- PANIER -->
 <div class="cart" id="cart">
-<h2>Panier</h2>
+<h3>Panier</h3>
 <div id="cart-items"></div>
-<p>Total: <span id="total">0</span> FCFA</p>
-
-<button class="pay-btn wave" onclick="pay('Wave')">Wave</button>
-<button class="pay-btn orange" onclick="pay('Orange')">Orange Money</button>
-<button class="pay-btn whatsapp" onclick="orderWhatsApp()">WhatsApp</button>
+<p>Total: <span id="total">0</span></p>
 </div>
-
-<div class="cart-btn" onclick="toggleCart()">🛒</div>
 
 <script>
 
-// PRODUITS
-let products = JSON.parse(localStorage.getItem("products")) || [
-     {name:"KANE Soft", price:10000, img:"https://postimg.cc/qgBGVdFY"},
-    {name:"KANE Fresh", price:12000, img:"https://postimg.cc/94x45sKg"},
-    {name:"KANE Floral", price:15000, img:"https://postimg.cc/qgBGVdFY"},
-    {name:"KANE Intense", price:18000, img:"https://postimg.cc/qgBGVdFY"},
-    {name:"KANE Nuit", price:20000, img:"https://postimg.cc/qgBGVdFY"},
-    {name:"KANE Gold", price:22000, img:"https://postimg.cc/Wts265yv"},
-    {name:"KANE Luxe", price:25000, img:"https://postimg.cc/Wts265yv"},
-    
-    {name:"Sac cuir noir", price:15000, img:"https://postimg.cc/HcV9fwZJ"},
-    {name:"Sac cuir marron", price:18000, img:"https://postimg.cc/9zgvR1Hh"},
-    {name:"Sac cuir luxe", price:20000, img:"https://postimg.cc/SjPvNscS"},
-    {name:"Sac main élégant", price:22000, img:"https://postimg.cc/HJ3SGspd"},
-    {name:"Sac cuir simple", price:25000, img:"https://postimg.cc/3ybgCy88"},
-    {name:"Sac moderne", price:27000, img:"https://postimg.cc/QBV7tXQD"},
-    {name:"Sac fashion", price:28000, img:"https://postimg.cc/vcM6n7rr"},
-    {name:"Sac chic", price:29000, img:"https://postimg.cc/HJ3SGspd"},
-    {name:"Sac premium", price:30000, img:"https://postimg.cc/4nv57Q7h"}
+/* PRODUITS */
+const PRODUCTS = [
 
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-let orders = JSON.parse(localStorage.getItem("orders")) || [];
+/* PARFUMS */
+{name:"KANE Soft", price:10000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg"},
+{name:"KANE Fresh", price:12000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg"},
+{name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg"},
+{name:"KANE Intense", price:18000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg"},
+{name:"KANE Nuit", price:20000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg"},
+{name:"KANE Gold", price:22000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg"},
+{name:"KANE Luxe", price:25000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg"},
 
-// AFFICHAGE PRODUITS
-function displayProducts(){
-    let html="";
-    products.forEach((p,i)=>{
-        html+=`
-        <div class="card">
-            <img src="${p.img}">
-            <div class="card-content">
-                <h3>${p.name}</h3>
-                <p>${p.price} FCFA</p>
-                <button onclick="addToCart(${i})">Ajouter</button>
-            </div>
-        </div>`;
-    });
-    document.getElementById("products").innerHTML=html;
-}
-displayProducts();
+/* SACS */
+{name:"Sac cuir noir", price:15000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg"},
+{name:"Sac cuir marron", price:18000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg"},
+{name:"Sac cuir luxe", price:20000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg"},
+{name:"Sac main élégant", price:22000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg"},
+{name:"Sac cuir simple", price:25000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg"},
+{name:"Sac moderne", price:27000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpgg"},
+{name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg"},
+{name:"Sac chic", price:29000, img:"https://i.postimg.cc/placeholder7.jpg"},
+{name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg"}
 
-// PANIER
-function addToCart(i){
-    let item = cart.find(x=>x.name===products[i].name);
-    if(item) item.qty++;
-    else cart.push({...products[i],qty:1});
-    saveCart();
-    updateCart();
+];
+
+/* RENDER */
+const container=document.getElementById("products");
+
+PRODUCTS.forEach(p=>{
+container.innerHTML+=`
+<div class="card">
+<img src="${p.img}">
+<h3>${p.name}</h3>
+<p>${p.price} FCFA</p>
+<button onclick="add('${p.name}',${p.price})">Ajouter</button>
+</div>`;
+});
+
+/* PANIER */
+let cart=[];
+
+function add(name,price){
+let item=cart.find(i=>i.name===name);
+if(item){item.qty++}
+else{cart.push({name,price,qty:1})}
+update();
 }
 
-function updateCart(){
-    let html="";let total=0;
+function update(){
+let html="";
+let total=0;
 
-    cart.forEach((item,i)=>{
-        total+=item.price*item.qty;
-        html+=`
-        <div class="cart-item">
-        ${item.name} x${item.qty} = ${item.price*item.qty}
-        <br>
-        <button onclick="changeQty(${i},1)">+</button>
-        <button onclick="changeQty(${i},-1)">-</button>
-        <button onclick="removeItem(${i})">❌</button>
-        </div>`;
-    });
+cart.forEach(i=>{
+total+=i.price*i.qty;
+html+=`${i.name} x${i.qty}<br>`;
+});
 
-    document.getElementById("cart-items").innerHTML=html;
-    document.getElementById("total").innerText=total;
+document.getElementById("cart-items").innerHTML=html;
+document.getElementById("total").textContent=total;
+document.getElementById("count").textContent=cart.length;
 }
 
-function changeQty(i,v){
-    cart[i].qty+=v;
-    if(cart[i].qty<=0) cart.splice(i,1);
-    saveCart();updateCart();
-}
-
-function removeItem(i){
-    cart.splice(i,1);
-    saveCart();updateCart();
-}
-
-function saveCart(){
-    localStorage.setItem("cart",JSON.stringify(cart));
-}
-
-// PANIER UI
 function toggleCart(){
-    document.getElementById("cart").classList.toggle("active");
+document.getElementById("cart").classList.toggle("active");
 }
-
-// PAIEMENT
-function pay(method){
-    let total=document.getElementById("total").innerText;
-
-    let order={cart,total,date:new Date().toLocaleString()};
-    orders.push(order);
-    localStorage.setItem("orders",JSON.stringify(orders));
-
-    alert("Paiement "+method+"\nEnvoyer "+total+" FCFA au 70 962 57 18");
+function subscribeNewsletter(){
+  const email = el('#newsletterEmail').value.trim();
+  if(!email || !email.includes('@')){ alert('Entrer un email valide'); return; }
+  if(NEWS.includes(email)){ showToast('Déjà inscrit'); return; }
+  NEWS.push(email); write(KEY_NEWS, NEWS); showToast('✅ Inscription confirmée');
 }
+el('#openAuthBtn').addEventListener('click', ()=> { const u = getCurrentUser(); if(u) renderUserArea(); else openAuthModal(); });
+el('#openSellerBtn').addEventListener('click', openSellerPanel);
+el('#closeSellerBtn').addEventListener('click', closeSellerPanel);
+el('#newProductBtn').addEventListener('click', newProductFlow);
+el('#exportBtn').addEventListener('click', exportProducts);
+el('#exportOrdersBtn').addEventListener('click', exportOrdersCSV);
+el('#importBtn').addEventListener('click', ()=> el('#importFile').click());
+el('#importFile').addEventListener('change', (e)=> { const f = e.target.files[0]; if(!f) return; const reader = new FileReader(); reader.onload = (ev)=>{ try{ const arr = JSON.parse(ev.target.result); if(!Array.isArray(arr)){ alert('Fichier invalide'); return; } PRODUCTS = arr; write(KEY_PRODUCTS, PRODUCTS); renderProducts(PRODUCTS); renderRecommendations(); renderSellerPanel(); showToast('✅ Import terminé'); } catch(err){ alert('Erreur import : ' + err.message); } }; reader.readAsText(f); e.target.value=''; });
 
-// WHATSAPP
-function orderWhatsApp(){
-    let msg="Commande:%0A";
-    cart.forEach(i=>{
-        msg+=`${i.name} x${i.qty} = ${i.price*i.qty} FCFA%0A`;
-    });
-    msg+="Total:"+document.getElementById("total").innerText;
+if(localStorage.getItem('cookiesAccepted') === 'true'){ document.getElementById('cookie-banner').style.display='none'; }
+el('#accept-cookies').addEventListener('click', ()=>{ localStorage.setItem('cookiesAccepted','true'); document.getElementById('cookie-banner').style.display='none'; });
 
-    window.open("https://wa.me/221709625718?text="+msg);
-}
+el('#searchInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') applySearch(); });
+el('#deliveryZone').addEventListener('change', ()=> renderCart());
+el('#closeSellerBtn').addEventListener('click', ()=> closeSellerPanel());
 
-// ADMIN
-function showAdmin(){
-    document.getElementById("shop").style.display="none";
-    document.getElementById("admin").style.display="block";
-    loadAdmin();
-}
+// initial render
+renderProducts(PRODUCTS); renderRecommendations(); renderCart();
 
-function showShop(){
-    document.getElementById("shop").style.display="block";
-    document.getElementById("admin").style.display="none";
-}
-
-// ADD PRODUCT
-function addProduct(){
-    let name=document.getElementById("name").value;
-    let price=document.getElementById("price").value;
-    let img=document.getElementById("img").value;
-
-    products.push({name,price,img});
-    localStorage.setItem("products",JSON.stringify(products));
-    displayProducts();
-    loadAdmin();
-}
-
-// ADMIN VIEW
-function loadAdmin(){
-    let html="";
-    products.forEach((p,i)=>{
-        html+=`${p.name} - ${p.price} 
-        <button onclick="deleteProduct(${i})">❌</button><br>`;
-    });
-    document.getElementById("admin-products").innerHTML=html;
-
-    let ordersHtml="";
-    orders.forEach(o=>{
-        ordersHtml+=`Commande ${o.total} FCFA - ${o.date}<br>`;
-    });
-    document.getElementById("orders").innerHTML=ordersHtml;
-}
-
-function deleteProduct(i){
-    products.splice(i,1);
-    localStorage.setItem("products",JSON.stringify(products));
-    displayProducts();
-    loadAdmin();
-}
-
-updateCart();
+window.addEventListener('beforeunload', ()=> persistAll());
 
 </script>
 
 </body>
 </html>
+   
