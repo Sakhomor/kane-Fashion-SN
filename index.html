@@ -3,18 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>KANE FASHION - Luxe</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+<title>KANE FASHION</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+:root{
+--gold1:#C9A227;
+--gold2:#E6BF52;
+--white:#ffffff;
+--light:#f8f8f8;
+--card:#ffffff;
+--text:#111;
+}
 
 body{
-font-family:'Poppins',sans-serif;
-background:#f8f8f8;
-color:#111;
+margin:0;
+font-family:Arial;
+background:var(--light);
+color:var(--text);
 }
 
 /* HEADER */
@@ -22,145 +27,94 @@ header{
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 20px;
+padding:15px;
 background:#fff;
-box-shadow:0 2px 10px rgba(0,0,0,0.05);
+border-bottom:1px solid #ddd;
 }
 
-.logo{
-font-family:'Playfair Display';
-font-size:22px;
-font-weight:700;
-}
-
-nav a{
-margin:0 10px;
-text-decoration:none;
-color:#333;
-}
-
-/* HERO */
-.hero{
-text-align:center;
-padding:60px 20px;
-background:linear-gradient(to right,#000,#333);
-color:#fff;
-}
-
-.hero h2{
-font-family:'Playfair Display';
-font-size:36px;
-}
+<div class="logo">
+<img src="https://www.image2url.com/r2/default/images/1776857636247-0a2140dc-2feb-402e-a1e8-8b2294630ffb.png" 
+alt="KANE FASHION">
+</div>
 
 /* FILTER */
 .filter{
 text-align:center;
-margin:20px;
+margin:10px;
 }
 
-select{
-padding:8px;
-border-radius:5px;
+.filter button{
+padding:8px 15px;
+margin:5px;
+border:none;
+background:#eee;
+color:#000;
+border-radius:6px;
 }
 
-/* PRODUCTS */
+/* GRID */
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
 gap:20px;
 padding:20px;
 }
 
 .card{
-background:#fff;
-border-radius:15px;
+background:var(--card);
 padding:15px;
-box-shadow:0 10px 30px rgba(0,0,0,0.08);
-transition:0.4s;
-position:relative;
-}
-
-.card:hover{
-transform:translateY(-8px);
-box-shadow:0 20px 40px rgba(0,0,0,0.15);
-}
-
-/* BADGE */
-.badge{
-position:absolute;
-top:10px;
-left:10px;
-background:red;
-color:#fff;
-padding:5px;
-font-size:12px;
-border-radius:5px;
-}
-
-/* GALLERY */
-.main-img{
-width:100%;
-height:200px;
-object-fit:cover;
-border-radius:10px;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 transition:0.3s;
 }
-
-.main-img:hover{
-transform:scale(1.1);
+.card:hover{transform:translateY(-8px)}
+  
+  .logo img{
+height:50px;
+filter: drop-shadow(0 2px 5px rgba(0,0,0,0.2));
 }
 
-.thumbs{
-display:flex;
-gap:5px;
-margin-top:5px;
+/* IMAGE HOVER */
+.img-box{
+position:relative;
+height:200px;
+overflow:hidden;
 }
-
-.thumbs img{
-width:20%;
-border-radius:5px;
-cursor:pointer;
-opacity:0.7;
-}
-
-.thumbs img:hover{
-opacity:1;
-transform:scale(1.05);
-}
-
-/* TEXT */
-h3{
-font-family:'Playfair Display';
-margin-top:10px;
-}
-
-.price{
-font-weight:bold;
-}
-
-/* BUTTON */
-button{
+.img-box img{
+position:absolute;
 width:100%;
-margin-top:10px;
-padding:10px;
-border:none;
-background:linear-gradient(135deg,#000,#333);
-color:#fff;
-border-radius:8px;
-cursor:pointer;
+height:100%;
+object-fit:cover;
+border-radius:10px;
+transition:0.5s;
+}
+.img-box img:last-child{opacity:0;}
+.img-box:hover img:first-child{opacity:0;}
+.img-box:hover img:last-child{opacity:1;}
+
+/* PANIER FLOTTANT */
+.cart-btn{
+position:fixed;
+bottom:20px;
+right:20px;
+background:linear-gradient(90deg,var(--gold1),var(--gold2));
+color:white;
+padding:15px;
+border-radius:50%;
+font-size:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
 }
 
-/* CART */
 .cart{
 position:fixed;
-top:80px;
-right:10px;
-background:#fff;
+right:20px;
+bottom:90px;
+background:white;
 padding:15px;
-width:250px;
-border-radius:10px;
+width:300px;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
 display:none;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
 }
 
 .cart.active{display:block;}
@@ -171,21 +125,29 @@ justify-content:space-between;
 margin:5px 0;
 }
 
-.total{
-margin-top:10px;
-font-weight:bold;
+/* DASHBOARD */
+#ordersPanel{
+position:fixed;
+top:10%;
+left:50%;
+transform:translateX(-50%);
+background:white;
+padding:20px;
+width:90%;
+max-width:400px;
+border-radius:12px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+display:none;
 }
 
-/* WHATSAPP */
-.whatsapp{
-position:fixed;
-bottom:20px;
-right:20px;
-background:#25D366;
-color:#fff;
-padding:15px;
-border-radius:50%;
-text-decoration:none;
+button{
+cursor:pointer;
+border:none;
+padding:6px 10px;
+border-radius:5px;
+background:var(--gold1);
+color:white;
+margin-top:5px;
 }
 
 </style>
@@ -195,165 +157,152 @@ text-decoration:none;
 
 <header>
 <div class="logo">KANE FASHION</div>
-<nav>
-<a href="#">Accueil</a>
-<a href="#">Produits</a>
-
-<span id="cart-icon" style="cursor:pointer;position:relative">
-🛒
-<span id="cart-count" style="position:absolute;top:-8px;right:-10px;background:red;color:#fff;border-radius:50%;font-size:10px;padding:2px 5px">0</span>
-</span>
-
-</nav>
+<button onclick="showOrders()">📊</button>
 </header>
 
-<section class="hero">
-<h2>Élégance & Luxe Absolu</h2>
-<p>Collection exclusive</p>
-</section>
-
 <div class="filter">
-<select onchange="filterProducts(this.value)">
-<option value="all">Tous</option>
-<option value="parfum">Parfums</option>
-<option value="sac">Sacs</option>
-</select>
+<button onclick="filter('all')">Tous</button>
+<button onclick="filter('parfum')">Parfums</button>
+<button onclick="filter('sac')">Sacs</button>
 </div>
 
-<section class="products">
-
-<!-- PRODUIT -->
-<div class="card" data-category="parfum">
-<div class="badge">Best</div>
-
-<img class="main-img" src="https://images.unsplash.com/photo-1585386959984-a41552231658">
-
-<div class="thumbs">
-<img src="https://images.unsplash.com/photo-1585386959984-a41552231658" onclick="changeImage(this)">
-<img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de" onclick="changeImage(this)">
-<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348" onclick="changeImage(this)">
-<img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519" onclick="changeImage(this)">
-<img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10" onclick="changeImage(this)">
-</div>
-
-<h3>KANE Soft</h3>
-<p class="price">10000 FCFA</p>
-
-<button onclick="addToCart('KANE Soft',10000)">Ajouter</button>
-</div>
-
-<!-- PRODUIT 2 -->
-<div class="card" data-category="sac">
-
-<img class="main-img" src="https://images.unsplash.com/photo-1596462502278-27bfdc403348">
-
-<div class="thumbs">
-<img src="https://images.unsplash.com/photo-1596462502278-27bfdc403348" onclick="changeImage(this)">
-<img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519" onclick="changeImage(this)">
-<img src="https://images.unsplash.com/photo-1583316174775-bd6dc0e9f298" onclick="changeImage(this)">
-<img src="https://images.unsplash.com/photo-1615634260167-c8cdede054de" onclick="changeImage(this)">
-<img src="https://images.unsplash.com/photo-1598033129183-c4f50c736f10" onclick="changeImage(this)">
-</div>
-
-<h3>Sac cuir</h3>
-<p class="price">15000 FCFA</p>
-
-<button onclick="addToCart('Sac cuir',15000)">Ajouter</button>
-</div>
-
-</section>
+<section class="products" id="products"></section>
 
 <!-- PANIER -->
+<div class="cart-btn" onclick="toggleCart()">🛒 <span id="count">0</span></div>
+
 <div class="cart" id="cart">
 <h3>Panier</h3>
 <div id="cart-items"></div>
-<p class="total">Total: <span id="total">0</span> FCFA</p>
-<button onclick="sendWhatsApp()">Commander</button>
+<p>Total: <span id="total">0</span> FCFA</p>
+<button onclick="saveOrder()">Commander</button>
 </div>
 
-<a class="whatsapp" href="https://wa.me/221709625718">💬</a>
+<!-- COMMANDES -->
+<div id="ordersPanel">
+<h3>Commandes</h3>
+<div id="ordersList"></div>
+<button onclick="clearOrders()">Supprimer</button>
+<button onclick="closeOrders()">Fermer</button>
+</div>
 
 <script>
 
-let cart=[];
+/* PRODUITS */
+const PRODUCTS = [
+{name:"KANE SOFT",price:10000,cat:"parfum",img1:"https://images.unsplash.com/photo-1585386959984-a41552231658",img2:"https://images.unsplash.com/photo-1615634260167-c8cdede054de"},
+{name:"KANE FRESH",price:12000,cat:"parfum",img1:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10",img2:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519"},
+{name:"KANE FLORAL",price:15000,cat:"parfum",img1:"https://images.unsplash.com/photo-1583316174775-bd6dc0e9f298",img2:"https://images.unsplash.com/photo-1596462502278-27bfdc403348"},
+{name:"KANE INTENSE",price:18000,cat:"parfum",img1:"https://images.unsplash.com/photo-1615634260167-c8cdede054de",img2:"https://images.unsplash.com/photo-1585386959984-a41552231658"},
+{name:"KANE NUIT",price:20000,cat:"parfum",img1:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10",img2:"https://images.unsplash.com/photo-1583316174775-bd6dc0e9f298"},
+{name:"KANE GOLD",price:22000,cat:"parfum",img1:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519",img2:"https://images.unsplash.com/photo-1596462502278-27bfdc403348"},
+{name:"KANE LUXE",price:25000,cat:"parfum",img1:"https://images.unsplash.com/photo-1585386959984-a41552231658",img2:"https://images.unsplash.com/photo-1615634260167-c8cdede054de"},
+{name:"KANE ROYAL",price:28000,cat:"parfum",img1:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10",img2:"https://images.unsplash.com/photo-1583316174775-bd6dc0e9f298"},
+{name:"KANE PRESTIGE",price:30000,cat:"parfum",img1:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519",img2:"https://images.unsplash.com/photo-1596462502278-27bfdc403348"},
 
-/* ADD CART */
-function addToCart(name,price){
-let item=cart.find(i=>i.name===name);
-if(item){item.qty++}else{cart.push({name,price,qty:1})}
-alert("Ajouté au panier");
-updateCart();
+{name:"SAC CUIR NOIR",price:15000,cat:"sac",img1:"https://images.unsplash.com/photo-1596462502278-27bfdc403348",img2:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519"},
+{name:"SAC CUIR MARRON",price:18000,cat:"sac",img1:"https://images.unsplash.com/photo-1583316174775-bd6dc0e9f298",img2:"https://images.unsplash.com/photo-1615634260167-c8cdede054de"},
+{name:"SAC CUIR LUXE",price:20000,cat:"sac",img1:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10",img2:"https://images.unsplash.com/photo-1585386959984-a41552231658"},
+{name:"SAC MAIN ELEGANT",price:22000,cat:"sac",img1:"https://images.unsplash.com/photo-1585386959984-a41552231658",img2:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10"},
+{name:"SAC CUIR SIMPLE",price:25000,cat:"sac",img1:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519",img2:"https://images.unsplash.com/photo-1583316174775-bd6dc0e9f298"},
+{name:"SAC MODERNE",price:27000,cat:"sac",img1:"https://images.unsplash.com/photo-1596462502278-27bfdc403348",img2:"https://images.unsplash.com/photo-1615634260167-c8cdede054de"},
+{name:"SAC FASHION",price:28000,cat:"sac",img1:"https://images.unsplash.com/photo-1583316174775-bd6dc0e9f298",img2:"https://images.unsplash.com/photo-1600185365483-26d7a4cc7519"},
+{name:"SAC CHIC",price:29000,cat:"sac",img1:"https://images.unsplash.com/photo-1598033129183-c4f50c736f10",img2:"https://images.unsplash.com/photo-1585386959984-a41552231658"}
+];
+
+/* RENDER + CART + COMMANDES (identique) */
+function render(list){
+let html="";
+list.forEach(p=>{
+html+=`
+<div class="card">
+<div class="img-box">
+<img src="${p.img1}">
+<img src="${p.img2}">
+</div>
+<h3>${p.name}</h3>
+<p>${p.price} FCFA</p>
+<button onclick="add('${p.name}',${p.price})">Ajouter</button>
+</div>`;
+});
+document.getElementById("products").innerHTML=html;
+}
+render(PRODUCTS);
+
+function filter(cat){
+if(cat==="all") render(PRODUCTS);
+else render(PRODUCTS.filter(p=>p.cat===cat));
 }
 
-/* UPDATE */
-function updateCart(){
-let container=document.getElementById('cart-items');
-container.innerHTML='';
+let cart=[];
+
+function add(name,price){
+let item=cart.find(i=>i.name===name);
+if(item){item.qty++}
+else{cart.push({name,price,qty:1})}
+update();
+}
+
+function update(){
+let html="";
 let total=0;
 
-cart.forEach((item,i)=>{
-total+=item.price*item.qty;
-
-container.innerHTML+=`
+cart.forEach((i,index)=>{
+total+=i.price*i.qty;
+html+=`
 <div class="cart-item">
-${item.name} x${item.qty}
+${i.name} x${i.qty}
 <div>
-<button onclick="changeQty(${i},-1)">-</button>
-<button onclick="changeQty(${i},1)">+</button>
+<button onclick="change(${index},-1)">-</button>
+<button onclick="change(${index},1)">+</button>
 </div>
 </div>`;
 });
 
-document.getElementById('total').textContent=total;
-document.getElementById('cart-count').textContent=cart.length;
+document.getElementById("cart-items").innerHTML=html;
+document.getElementById("total").textContent=total;
+document.getElementById("count").textContent=cart.length;
 }
 
-/* QTY */
-function changeQty(i,d){
+function change(i,d){
 cart[i].qty+=d;
 if(cart[i].qty<=0) cart.splice(i,1);
-updateCart();
+update();
 }
 
-/* WHATSAPP */
-function sendWhatsApp(){
-let msg="Commande:%0A";
-let total=0;
+function toggleCart(){
+document.getElementById("cart").classList.toggle("active");
+}
 
-cart.forEach(item=>{
-msg+=item.name+" x"+item.qty+"%0A";
-total+=item.price*item.qty;
+function saveOrder(){
+let orders=JSON.parse(localStorage.getItem("orders"))||[];
+orders.push({date:new Date().toLocaleString(),items:cart});
+localStorage.setItem("orders",JSON.stringify(orders));
+alert("Commande enregistrée !");
+cart=[];
+update();
+}
+
+function showOrders(){
+let orders=JSON.parse(localStorage.getItem("orders"))||[];
+let html="";
+orders.forEach((o,i)=>{
+html+=`<div><b>Commande ${i+1}</b><br>${o.date}<br>`;
+o.items.forEach(it=>{html+=it.name+" x"+it.qty+"<br>";});
+html+="</div><hr>";
 });
-
-msg+="Total:"+total;
-window.open("https://wa.me/221709625718?text="+msg);
+document.getElementById("ordersList").innerHTML=html||"Aucune commande";
+document.getElementById("ordersPanel").style.display="block";
 }
 
-/* IMAGE SWITCH */
-function changeImage(el){
-let main=el.parentElement.parentElement.querySelector('.main-img');
-main.src=el.src;
-}
-
-/* FILTER */
-function filterProducts(cat){
-document.querySelectorAll('.card').forEach(card=>{
-if(cat==="all" || card.dataset.category===cat){
-card.style.display="block";
-}else{
-card.style.display="none";
-}
-});
-}
-
-/* TOGGLE CART */
-document.getElementById('cart-icon').onclick=()=>{
-document.getElementById('cart').classList.toggle('active');
-}
+function closeOrders(){document.getElementById("ordersPanel").style.display="none";}
+function clearOrders(){localStorage.removeItem("orders");showOrders();}
 
 </script>
 
 </body>
 </html>
+
+
 
 
