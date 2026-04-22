@@ -5,12 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KANE Fashion</title>
 
+<link rel="icon" href="https://i.postimg.cc/23JzWhPg/logo.png">
+
 <style>
 body{margin:0;font-family:sans-serif;background:#f5f5f5}
 
 /* HEADER */
 header{
-    background:#000;color:#fff;text-align:center;padding:15px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 20px;
+    background:#000;
+    color:#fff;
+}
+
+header img{
+    height:50px;
+    object-fit:contain;
+    filter:drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+}
+
+header button{
+    background:transparent;
+    border:1px solid #fff;
+    color:#fff;
+    padding:8px 12px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+header button:hover{
+    background:#fff;
+    color:#000;
 }
 
 /* GRID */
@@ -61,9 +88,16 @@ input{padding:8px;margin:5px;width:90%}
 <body>
 
 <header>
-<h1>KANE Fashion</h1>
+
+<!-- LOGO -->
+<img src="https://i.postimg.cc/23JzWhPg/logo.png" alt="KANE Fashion">
+
+<!-- MENU -->
+<div>
 <button onclick="showShop()">Boutique</button>
 <button onclick="showAdmin()">Admin</button>
+</div>
+
 </header>
 
 <!-- SHOP -->
@@ -103,16 +137,30 @@ input{padding:8px;margin:5px;width:90%}
 
 <script>
 
-// DATA
+// PRODUITS
 let products = JSON.parse(localStorage.getItem("products")) || [
-    {name:"KANE Soft",price:10000,img:"https://via.placeholder.com/200"},
-    {name:"Sac cuir noir",price:15000,img:"https://via.placeholder.com/200"}
-];
+     {name:"KANE Soft", price:10000, img:"https://postimg.cc/qgBGVdFY"},
+    {name:"KANE Fresh", price:12000, img:"https://postimg.cc/94x45sKg"},
+    {name:"KANE Floral", price:15000, img:"https://postimg.cc/qgBGVdFY"},
+    {name:"KANE Intense", price:18000, img:"https://postimg.cc/qgBGVdFY"},
+    {name:"KANE Nuit", price:20000, img:"https://postimg.cc/qgBGVdFY"},
+    {name:"KANE Gold", price:22000, img:"https://postimg.cc/Wts265yv"},
+    {name:"KANE Luxe", price:25000, img:"https://postimg.cc/Wts265yv"},
+    
+    {name:"Sac cuir noir", price:15000, img:"https://postimg.cc/HcV9fwZJ"},
+    {name:"Sac cuir marron", price:18000, img:"https://postimg.cc/9zgvR1Hh"},
+    {name:"Sac cuir luxe", price:20000, img:"https://postimg.cc/SjPvNscS"},
+    {name:"Sac main élégant", price:22000, img:"https://postimg.cc/HJ3SGspd"},
+    {name:"Sac cuir simple", price:25000, img:"https://postimg.cc/3ybgCy88"},
+    {name:"Sac moderne", price:27000, img:"https://postimg.cc/QBV7tXQD"},
+    {name:"Sac fashion", price:28000, img:"https://postimg.cc/vcM6n7rr"},
+    {name:"Sac chic", price:29000, img:"https://postimg.cc/HJ3SGspd"},
+    {name:"Sac premium", price:30000, img:"https://postimg.cc/4nv57Q7h"}
 
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
-// AFFICHER PRODUITS
+// AFFICHAGE PRODUITS
 function displayProducts(){
     let html="";
     products.forEach((p,i)=>{
