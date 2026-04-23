@@ -12,7 +12,7 @@
 
 body{
 margin:0;
-font-family:Arial;
+font-family:Poppins,Arial;
 background:#f8f8f8;
 }
 
@@ -25,36 +25,51 @@ display:flex;
 justify-content:space-between;
 align-items:center;
 padding:10px 20px;
-border-bottom:1px solid #ddd;
 z-index:1000;
+border-bottom:1px solid #ddd;
 }
 
-.logo img{height:45px;}
+.logo img{height:40px}
 
+/* MENU MOBILE */
+.menu-btn{
+font-size:25px;
+cursor:pointer;
+display:none;
+}
+
+nav{
+display:flex;
+gap:15px;
+}
+
+nav a{
+text-decoration:none;
+color:#000;
+font-weight:500;
+}
+
+@media(max-width:768px){
+nav{
+position:fixed;
+top:0;
+right:-100%;
+width:70%;
+height:100%;
+background:#fff;
+flex-direction:column;
+padding:30px;
+transition:0.4s;
+}
+nav.active{right:0;}
+.menu-btn{display:block;}
+}
+
+/* SEARCH */
 .search{
 padding:8px;
 border-radius:20px;
 border:1px solid #ccc;
-}
-
-/* FILTER */
-.filter{
-text-align:center;
-margin:10px;
-}
-
-.filter button{
-padding:8px 15px;
-margin:5px;
-border:none;
-border-radius:20px;
-cursor:pointer;
-background:#eee;
-}
-
-.filter button.active{
-background:var(--gold);
-color:#fff;
 }
 
 /* GRID */
@@ -71,20 +86,14 @@ border-radius:15px;
 overflow:hidden;
 box-shadow:0 10px 25px rgba(0,0,0,0.1);
 transition:0.4s;
-opacity:0;
-transform:translateY(30px);
-animation:fadeIn 0.5s forwards;
 }
 
-@keyframes fadeIn{
-to{opacity:1;transform:translateY(0);}
-}
+.card:hover{transform:translateY(-8px)}
 
 .img-box{
 height:230px;
 overflow:hidden;
 cursor:pointer;
-position:relative;
 }
 
 .img-box img{
@@ -99,36 +108,33 @@ transform:scale(1.2);
 filter:brightness(0.7);
 }
 
-.overlay{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-display:flex;
-justify-content:center;
-align-items:center;
-color:#fff;
-opacity:0;
-transition:0.3s;
-}
-
-.img-box:hover .overlay{
-opacity:1;
+/* PANIER BOUTON */
+.cart-btn{
+position:fixed;
+bottom:20px;
+right:20px;
+background:var(--gold);
+color:white;
+padding:15px;
+border-radius:50%;
+font-size:20px;
+cursor:pointer;
 }
 
 /* PANIER */
 .cart{
 position:fixed;
-bottom:20px;
+bottom:80px;
 right:20px;
 background:#fff;
-width:300px;
+width:280px;
 padding:15px;
 border-radius:15px;
 box-shadow:0 5px 20px rgba(0,0,0,0.2);
-cursor:move;
+display:none;
 }
+
+.cart.active{display:block;}
 
 .cart-item{
 display:flex;
@@ -136,6 +142,42 @@ justify-content:space-between;
 margin:5px 0;
 }
 
+/* MODAL PRODUIT */
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:#fff;
+padding:20px;
+border-radius:10px;
+width:90%;
+max-width:400px;
+}
+
+/* CONTACT */
+.contact{
+text-align:center;
+padding:20px;
+font-size:18px;
+}
+
+.contact span{
+background:#000;
+color:#fff;
+padding:10px 15px;
+border-radius:30px;
+}
+
+/* BUTTON */
 button{
 background:var(--gold);
 border:none;
@@ -143,12 +185,6 @@ padding:6px 10px;
 color:white;
 cursor:pointer;
 border-radius:5px;
-}
-
-/* CONTACT */
-.contact{
-text-align:center;
-padding:20px;
 }
 </style>
 </head>
@@ -160,60 +196,67 @@ padding:20px;
 <img src="https://www.image2url.com/r2/default/images/1776857636247-0a2140dc-2feb-402e-a1e8-8b2294630ffb.png">
 </div>
 
-<input class="search" placeholder="Rechercher..." oninput="search(this.value)">
-</header>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<!-- FILTRE -->
-<div class="filter">
-<button onclick="filterProducts('all')" class="active">Tous</button>
-<button onclick="filterProducts('parfum')">Parfums</button>
-<button onclick="filterProducts('sac')">Sacs</button>
-</div>
+<nav id="menu">
+<a href="#">Accueil</a>
+<a href="#">Produits</a>
+<a href="#">Contact</a>
+</nav>
+
+<input class="search" placeholder="Recherche..." oninput="search(this.value)">
+</header>
 
 <div class="products" id="products"></div>
 
 <!-- PANIER -->
+<div class="cart-btn" onclick="toggleCart()">🛒 <span id="count">0</span></div>
+
 <div class="cart" id="cart">
-<h3>Panier (<span id="count">0</span>)</h3>
+<h3>Panier</h3>
 <div id="cart-items"></div>
 <p>Total: <span id="total">0</span> FCFA</p>
-<button onclick="order()">Commander WhatsApp</button>
+<button onclick="order()">Commander</button>
+</div>
+
+<!-- MODAL PRODUIT -->
+<div class="modal" id="modal">
+<div class="modal-content" id="modal-content"></div>
 </div>
 
 <div class="contact">
-📞 +221 70 432 21 45
+<span>📞 +221 70 432 21 45</span>
 </div>
 
 <script>
 
 const PHONE="221704322145";
 
-/* PRODUITS */
 const PRODUCTS=[
 
-/* PARFUMS */
-{name:"KANE Soft", price:10000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum"},
-{name:"KANE Fresh", price:12000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum"},
-{name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
-{name:"KANE Intense", price:18000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum"},
-{name:"KANE Nuit", price:20000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
-{name:"KANE Gold", price:22000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum"},
-{name:"KANE Luxe", price:25000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
-
-/* SACS */
-{name:"Sac cuir noir", price:15000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-{name:"Sac cuir marron", price:18000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-{name:"Sac cuir luxe", price:20000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-{name:"Sac main élégant", price:22000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-{name:"Sac cuir simple", price:25000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac"},
-{name:"Sac moderne", price:27000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac"},
-{name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-{name:"Sac chic", price:29000, img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg", cat:"sac"},
-{name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"}
-
-];
 
 let filtered=[...PRODUCTS];
+‎/* PARFUMS */
+‎{name:"KANE Soft", price:10000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum"},
+‎{name:"KANE Fresh", price:12000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum"},
+‎{name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
+‎{name:"KANE Intense", price:18000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum"},
+‎{name:"KANE Nuit", price:20000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
+‎{name:"KANE Gold", price:22000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum"},
+‎{name:"KANE Luxe", price:25000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
+‎
+‎/* SACS */
+‎{name:"Sac cuir noir", price:15000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+‎{name:"Sac cuir marron", price:18000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+‎{name:"Sac cuir luxe", price:20000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+‎{name:"Sac main élégant", price:22000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+‎{name:"Sac cuir simple", price:25000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac"},
+‎{name:"Sac moderne", price:27000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac"},
+‎{name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+‎{name:"Sac chic", price:29000, img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg", cat:"sac"},
+‎{name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"}
+‎
+‎];
 
 /* RENDER */
 function render(){
@@ -221,35 +264,43 @@ let html="";
 filtered.forEach(p=>{
 html+=`
 <div class="card">
-<div class="img-box">
+<div class="img-box" onclick="showProduct('${p.name}')">
 <img src="${p.img}">
-<div class="overlay">Voir</div>
 </div>
 <h3>${p.name}</h3>
 <p>${p.price} FCFA</p>
 <button onclick="add('${p.name}',${p.price})">Ajouter</button>
 </div>`;
 });
-document.getElementById("products").innerHTML=html;
+products.innerHTML=html;
 }
 render();
 
-/* FILTRE */
-function filterProducts(cat){
-document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("active"));
-event.target.classList.add("active");
-
-if(cat==="all") filtered=[...PRODUCTS];
-else filtered=PRODUCTS.filter(p=>p.cat===cat);
-
-render();
+/* DETAIL */
+function showProduct(name){
+let p=PRODUCTS.find(x=>x.name===name);
+modal.style.display="flex";
+modal-content.innerHTML=`
+<h2>${p.name}</h2>
+<img src="${p.img}" style="width:100%">
+<p>${p.desc}</p>
+<p>${p.price} FCFA</p>
+<button onclick="add('${p.name}',${p.price})">Ajouter</button>
+`;
 }
+
+modal.onclick=()=>modal.style.display="none";
 
 /* SEARCH */
 function search(q){
 q=q.toLowerCase();
 filtered=PRODUCTS.filter(p=>p.name.toLowerCase().includes(q));
 render();
+}
+
+/* MENU */
+function toggleMenu(){
+menu.classList.toggle("active");
 }
 
 /* PANIER */
@@ -271,23 +322,13 @@ total+=i.price*i.qty;
 html+=`
 <div class="cart-item">
 ${i.name} x${i.qty}
-<div>
-<button onclick="change(${index},-1)">-</button>
-<button onclick="change(${index},1)">+</button>
 <button onclick="removeItem(${index})">❌</button>
-</div>
 </div>`;
 });
 
-document.getElementById("cart-items").innerHTML=html;
-document.getElementById("total").textContent=total;
-document.getElementById("count").textContent=cart.length;
-}
-
-function change(i,d){
-cart[i].qty+=d;
-if(cart[i].qty<=0) cart.splice(i,1);
-update();
+cart-items.innerHTML=html;
+total.innerText=total;
+count.innerText=cart.length;
 }
 
 function removeItem(i){
@@ -295,76 +336,54 @@ cart.splice(i,1);
 update();
 }
 
+function toggleCart(){
+cart.classList.toggle("active");
+}
+
 /* WHATSAPP */
 function order(){
 let msg="Commande:%0A";
-let total=0;
-
-cart.forEach(i=>{
-msg+=i.name+" x"+i.qty+"%0A";
-total+=i.price*i.qty;
-});
-
-msg+="Total:"+total+" FCFA";
-
+cart.forEach(i=>msg+=i.name+" x"+i.qty+"%0A");
 window.open(`https://wa.me/${PHONE}?text=${msg}`);
 }
-
-/* DRAG */
-let cartBox=document.getElementById("cart");
-let isDown=false,offset=[0,0];
-
-cartBox.addEventListener("mousedown",e=>{
-isDown=true;
-offset=[cartBox.offsetLeft-e.clientX,cartBox.offsetTop-e.clientY];
-});
-
-document.addEventListener("mouseup",()=>isDown=false);
-
-document.addEventListener("mousemove",e=>{
-if(isDown){
-cartBox.style.left=(e.clientX+offset[0])+"px";
-cartBox.style.top=(e.clientY+offset[1])+"px";
-}
-});
-async function handleSendChat(){
-  const input = el('#chatInputText'); const text = input.value.trim(); if(!text) return;
-  input.value = '';
-  addChatBubble('user', text);
-  // push to history
-  chatHistory.push({ role: 'user', content: text });
-  // language preference
-  const lang = el('#chatLang').value; // 'auto'|'fr'|'en'
-  const systemLangHint = lang === 'fr' ? 'Please respond in French.' : (lang === 'en' ? 'Please respond in English.' : '');
-  const messages = [{ role: 'system', content: CHAT_SYSTEM_PROMPT + (systemLangHint ? ' ' + systemLangHint : '') }, ...chatHistory];
-  addChatBubble('bot', '⏳ Réponse en cours...');
-  const reply = await callChatServer(messages);
-  // remove the temporary 'loading' bubble (last bot one)
-  const body = el('#chatBody');
-  const last = body.querySelector('.msg-bot:last-child');
-  if(last && last.textContent === '⏳ Réponse en cours...') last.remove();
-  addChatBubble('bot', reply);
-  // add assistant to history
-  chatHistory.push({ role: 'assistant', content: reply });
-}
-
-/* Chat toggle */
-el('#toggleChatBtn').addEventListener('click', ()=> {
-  el('#chatWindow').classList.toggle('open');
-  // focus input when opening
-  setTimeout(()=> el('#chatInputText').focus(), 200);
-});
-el('#closeChatBtn').addEventListener('click', ()=> el('#chatWindow').classList.remove('open'));
-el('#sendChatBtn').addEventListener('click', handleSendChat);
-el('#chatInputText').addEventListener('keydown', (e)=>{ if(e.key==='Enter') handleSendChat(); });
-
-/* Newsletter */
-function subscribeNewsletter(){
-  const email = el('#newsletterEmail').value.trim();
-  if(!email || !email.includes('@')){ alert('Entrer un email valide'); return; }
-  if(NEWS.includes(email)){ showToast('Déjà inscrit'); return; }
-  NEWS.push(email); write(KEY_NEWS, NEWS); showToast('✅ Inscription confirmée');}
-
+  
+‎async function handleSendChat(){
+‎  const input = el('#chatInputText'); const text = input.value.trim(); if(!text) return;
+‎  input.value = '';
+‎  addChatBubble('user', text);
+‎  // push to history
+‎  chatHistory.push({ role: 'user', content: text });
+‎  // language preference
+‎  const lang = el('#chatLang').value; // 'auto'|'fr'|'en'
+‎  const systemLangHint = lang === 'fr' ? 'Please respond in French.' : (lang === 'en' ? 'Please respond in English.' : '');
+‎  const messages = [{ role: 'system', content: CHAT_SYSTEM_PROMPT + (systemLangHint ? ' ' + systemLangHint : '') }, ...chatHistory];
+‎  addChatBubble('bot', '⏳ Réponse en cours...');
+‎  const reply = await callChatServer(messages);
+‎  // remove the temporary 'loading' bubble (last bot one)
+‎  const body = el('#chatBody');
+‎  const last = body.querySelector('.msg-bot:last-child');
+‎  if(last && last.textContent === '⏳ Réponse en cours...') last.remove();
+‎  addChatBubble('bot', reply);
+‎  // add assistant to history
+‎  chatHistory.push({ role: 'assistant', content: reply });
+‎}
+‎
+‎/* Chat toggle */
+‎el('#toggleChatBtn').addEventListener('click', ()=> {
+‎  el('#chatWindow').classList.toggle('open');
+‎  // focus input when opening
+‎  setTimeout(()=> el('#chatInputText').focus(), 200);
+‎});
+‎el('#closeChatBtn').addEventListener('click', ()=> el('#chatWindow').classList.remove('open'));
+‎el('#sendChatBtn').addEventListener('click', handleSendChat);
+‎el('#chatInputText').addEventListener('keydown', (e)=>{ if(e.key==='Enter') handleSendChat(); });
+‎
+‎/* Newsletter */
+‎function subscribeNewsletter(){
+‎  const email = el('#newsletterEmail').value.trim();
+‎  if(!email || !email.includes('@')){ alert('Entrer un email valide'); return; }
+‎  if(NEWS.includes(email)){ showToast('Déjà inscrit'); return; }
+‎  NEWS.push(email); write(KEY_NEWS, NEWS); showToast('✅ Inscription confirmée');}
 </script>
 
 </body>
