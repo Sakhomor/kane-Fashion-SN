@@ -7,29 +7,44 @@
 
 <style>
 :root{--gold:#C9A227;}
-body{margin:0;font-family:Arial;background:#f8f8f8}
+
+body{
+margin:0;
+font-family:Arial;
+background:#f8f8f8;
+}
 
 /* HEADER */
 header{
-position:sticky;top:0;background:#fff;
-display:flex;justify-content:space-between;
-align-items:center;padding:10px 20px;
-z-index:1000;border-bottom:1px solid #ddd;
+position:sticky;
+top:0;
+background:#fff;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:10px 20px;
+border-bottom:1px solid #ddd;
+z-index:1000;
 }
 
 .logo img{height:40px}
 
-/* MENU MOBILE */
+/* MENU */
 .menu-btn{font-size:25px;cursor:pointer;display:none;}
 nav{display:flex;gap:15px;}
 nav a{text-decoration:none;color:#000;}
 
 @media(max-width:768px){
 nav{
-position:fixed;top:0;right:-100%;
-width:70%;height:100%;
-background:#fff;flex-direction:column;
-padding:30px;transition:0.4s;
+position:fixed;
+top:0;
+right:-100%;
+width:70%;
+height:100%;
+background:#fff;
+flex-direction:column;
+padding:30px;
+transition:0.3s;
 }
 nav.active{right:0;}
 .menu-btn{display:block;}
@@ -37,83 +52,131 @@ nav.active{right:0;}
 
 /* SEARCH */
 .search{
-padding:8px;border-radius:20px;border:1px solid #ccc;
+padding:8px;
+border-radius:20px;
+border:1px solid #ccc;
 }
 
 /* FILTER */
 .filter{text-align:center;margin:10px;}
 .filter button{
-padding:8px 15px;margin:5px;
-border:none;border-radius:20px;
-cursor:pointer;background:#eee;
+padding:8px 15px;
+margin:5px;
+border:none;
+border-radius:20px;
+cursor:pointer;
+background:#eee;
 }
-.filter .active{background:var(--gold);color:#fff;}
+.filter .active{
+background:var(--gold);
+color:#fff;
+}
 
-/* GRID */
+/* PRODUCTS */
 .products{
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
-gap:20px;padding:20px;
+gap:20px;
+padding:20px;
 }
 
 .card{
-background:#fff;border-radius:15px;
-overflow:hidden;box-shadow:0 5px 20px rgba(0,0,0,0.1);
+background:#fff;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 transition:0.3s;
 }
 .card:hover{transform:translateY(-8px)}
 
-.img-box{height:220px;overflow:hidden;cursor:pointer;}
-.img-box img{
-width:100%;height:100%;
-object-fit:cover;transition:0.5s;
+.img-box{
+height:220px;
+overflow:hidden;
+cursor:pointer;
 }
-.img-box:hover img{transform:scale(1.2)}
+.img-box img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.4s;
+}
+.img-box:hover img{
+transform:scale(1.1);
+}
 
 /* PANIER */
 .cart-btn{
-position:fixed;bottom:20px;right:20px;
-background:var(--gold);color:white;
-padding:15px;border-radius:50%;
-font-size:20px;cursor:pointer;
+position:fixed;
+bottom:20px;
+right:20px;
+background:var(--gold);
+color:#fff;
+padding:15px;
+border-radius:50%;
+cursor:pointer;
+font-size:18px;
 }
 
 .cart{
-position:fixed;bottom:80px;right:20px;
-background:#fff;width:280px;
-padding:15px;border-radius:15px;
+position:fixed;
+bottom:80px;
+right:20px;
+background:#fff;
+width:280px;
+padding:15px;
+border-radius:15px;
 box-shadow:0 5px 20px rgba(0,0,0,0.2);
 display:none;
 }
 .cart.active{display:block;}
 
 .cart-item{
-display:flex;justify-content:space-between;margin:5px 0;
+display:flex;
+justify-content:space-between;
+margin:5px 0;
 }
 
 /* MODAL */
 .modal{
-position:fixed;top:0;left:0;
-width:100%;height:100%;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
 background:rgba(0,0,0,0.7);
-display:none;justify-content:center;align-items:center;
+display:none;
+justify-content:center;
+align-items:center;
 }
+
 .modal-content{
-background:#fff;padding:20px;border-radius:10px;width:90%;max-width:400px;
+background:#fff;
+padding:20px;
+border-radius:10px;
+width:90%;
+max-width:400px;
 }
 
 /* CONTACT */
-.contact{text-align:center;padding:20px;}
+.contact{
+text-align:center;
+padding:20px;
+}
 .contact span{
-background:#000;color:#fff;
-padding:10px 15px;border-radius:30px;
+background:#000;
+color:#fff;
+padding:10px 15px;
+border-radius:30px;
 }
 
 /* BUTTON */
 button{
-background:var(--gold);border:none;
-padding:6px 10px;color:white;
-cursor:pointer;border-radius:5px;
+background:var(--gold);
+border:none;
+padding:6px 10px;
+color:#fff;
+cursor:pointer;
+border-radius:5px;
 }
 </style>
 </head>
@@ -133,7 +196,7 @@ cursor:pointer;border-radius:5px;
 <a href="#">Contact</a>
 </nav>
 
-<input class="search" placeholder="Recherche..." oninput="search(this.value)">
+<input class="search" placeholder="Rechercher..." oninput="search(this.value)">
 </header>
 
 <div class="filter">
@@ -165,57 +228,61 @@ cursor:pointer;border-radius:5px;
 
 <script>
 
-const PHONE="221704322145";
+const PHONE = "221704322145";
 
 /* PRODUITS */
-const PRODUCTS=[
+const PRODUCTS = [
 
-/* PARFUMS */
 {name:"KANE Soft", price:10000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum", desc:"Parfum doux et élégant"},
 {name:"KANE Fresh", price:12000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum", desc:"Fraîcheur intense"},
-{name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Notes florales raffinées"},
+{name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Notes florales"},
 {name:"KANE Intense", price:18000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum", desc:"Parfum puissant"},
-{name:"KANE Nuit", price:20000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Mystérieux et profond"},
-{name:"KANE Gold", price:22000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum", desc:"Luxe absolu"},
-{name:"KANE Luxe", price:25000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Collection premium"},
+{name:"KANE Nuit", price:20000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Mystérieux"},
+{name:"KANE Gold", price:22000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum", desc:"Luxe"},
+{name:"KANE Luxe", price:25000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Premium"},
 
-/* SACS */
-{name:"Sac cuir noir", price:15000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Cuir noir élégant"},
-{name:"Sac cuir marron", price:18000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Style classique"},
-{name:"Sac cuir luxe", price:20000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Finition premium"},
-{name:"Sac main élégant", price:22000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Chic moderne"},
-{name:"Sac cuir simple", price:25000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac", desc:"Minimaliste"},
-{name:"Sac moderne", price:27000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac", desc:"Design tendance"},
-{name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Mode actuelle"},
-{name:"Sac chic", price:29000, img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg", cat:"sac", desc:"Ultra élégant"},
-{name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Top qualité"}
+{name:"Sac cuir noir", price:15000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Cuir noir"},
+{name:"Sac cuir marron", price:18000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Classique"},
+{name:"Sac cuir luxe", price:20000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Luxe"},
+{name:"Sac main élégant", price:22000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Chic"},
+{name:"Sac cuir simple", price:25000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac", desc:"Simple"},
+{name:"Sac moderne", price:27000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac", desc:"Moderne"},
+{name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Fashion"},
+{name:"Sac chic", price:29000, img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg", cat:"sac", desc:"Élégant"},
+{name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Premium"}
 
 ];
 
-let filtered=[...PRODUCTS];
+let filtered = [...PRODUCTS];
+let cart = [];
 
 /* RENDER */
 function render(){
-let html="";
+const container = document.getElementById("products");
+let html = "";
 filtered.forEach(p=>{
-html+=`
+html += `
 <div class="card">
 <div class="img-box" onclick="showProduct('${p.name}')">
 <img src="${p.img}">
 </div>
 <h3>${p.name}</h3>
 <p>${p.price} FCFA</p>
-<button onclick="add('${p.name}',${p.price})">Ajouter</button>
+<button onclick="add('${p.name}', ${p.price})">Ajouter</button>
 </div>`;
 });
-products.innerHTML=html;
+container.innerHTML = html;
 }
 render();
 
 /* FILTER */
 function filterProducts(cat){
+document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("active"));
+event.target.classList.add("active");
+
 if(cat==="all") filtered=[...PRODUCTS];
 else filtered=PRODUCTS.filter(p=>p.cat===cat);
+
 render();
 }
 
@@ -228,62 +295,72 @@ render();
 
 /* DETAIL */
 function showProduct(name){
-let p=PRODUCTS.find(x=>x.name===name);
-modal.style.display="flex";
-modal-content.innerHTML=`
+const p = PRODUCTS.find(x=>x.name===name);
+document.getElementById("modal").style.display="flex";
+document.getElementById("modal-content").innerHTML = `
 <h2>${p.name}</h2>
 <img src="${p.img}" style="width:100%">
 <p>${p.desc}</p>
 <p>${p.price} FCFA</p>
-<button onclick="add('${p.name}',${p.price})">Ajouter</button>
+<button onclick="add('${p.name}', ${p.price})">Ajouter</button>
 `;
 }
-modal.onclick=()=>modal.style.display="none";
+
+document.getElementById("modal").onclick = function(){
+this.style.display="none";
+};
 
 /* PANIER */
-let cart=[];
-
 function add(name,price){
-let item=cart.find(i=>i.name===name);
+let item = cart.find(i=>i.name===name);
 if(item){item.qty++}
 else{cart.push({name,price,qty:1})}
-update();
+updateCart();
 }
 
-function update(){
-let html=""; let total=0;
+function updateCart(){
+let html="";
+let total=0;
+
 cart.forEach((i,index)=>{
 total+=i.price*i.qty;
-html+=`${i.name} x${i.qty} <button onclick="removeItem(${index})">❌</button><br>`;
+html+=`
+<div class="cart-item">
+${i.name} x${i.qty}
+<button onclick="removeItem(${index})">❌</button>
+</div>`;
 });
-cart-items.innerHTML=html;
-total.innerText=total;
-count.innerText=cart.length;
+
+document.getElementById("cart-items").innerHTML = html;
+document.getElementById("total").innerText = total;
+document.getElementById("count").innerText = cart.length;
 }
 
 function removeItem(i){
 cart.splice(i,1);
-update();
+updateCart();
 }
 
 function toggleCart(){
-cart.classList.toggle("active");
+document.getElementById("cart").classList.toggle("active");
 }
 
 /* WHATSAPP */
 function order(){
 let msg="Commande:%0A";
-cart.forEach(i=>msg+=i.name+" x"+i.qty+"%0A");
+cart.forEach(i=>{
+msg+=i.name+" x"+i.qty+"%0A";
+});
 window.open(`https://wa.me/${PHONE}?text=${msg}`);
 }
 
 /* MENU */
 function toggleMenu(){
-menu.classList.toggle("active");
+document.getElementById("menu").classList.toggle("active");
 }
 
 </script>
 
 </body>
-  </html>
+</html>
    
