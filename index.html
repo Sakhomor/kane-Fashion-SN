@@ -27,26 +27,43 @@ border-bottom:1px solid #ddd;
 z-index:1000;
 }
 
-.logo img{height:40px}
+.logo img{
+height:65px;
+}
 
 /* MENU */
-.menu-btn{font-size:25px;cursor:pointer;display:none;}
-nav{display:flex;gap:15px;}
-nav a{text-decoration:none;color:#000;}
+.menu-btn{
+font-size:25px;
+cursor:pointer;
+display:none;
+}
+
+nav{
+display:flex;
+gap:15px;
+}
+
+nav a{
+text-decoration:none;
+color:#000;
+}
 
 @media(max-width:768px){
 nav{
 position:fixed;
 top:0;
-right:-100%;
+right:0;
 width:70%;
 height:100%;
 background:#fff;
 flex-direction:column;
 padding:30px;
-transition:0.3s;
+transform:translateX(100%);
+transition:0.4s;
 }
-nav.active{right:0;}
+nav.active{
+transform:translateX(0);
+}
 .menu-btn{display:block;}
 }
 
@@ -58,7 +75,11 @@ border:1px solid #ccc;
 }
 
 /* FILTER */
-.filter{text-align:center;margin:10px;}
+.filter{
+text-align:center;
+margin:10px;
+}
+
 .filter button{
 padding:8px 15px;
 margin:5px;
@@ -67,6 +88,7 @@ border-radius:20px;
 cursor:pointer;
 background:#eee;
 }
+
 .filter .active{
 background:var(--gold);
 color:#fff;
@@ -87,19 +109,24 @@ overflow:hidden;
 box-shadow:0 5px 20px rgba(0,0,0,0.1);
 transition:0.3s;
 }
-.card:hover{transform:translateY(-8px)}
+
+.card:hover{
+transform:translateY(-8px);
+}
 
 .img-box{
 height:220px;
 overflow:hidden;
 cursor:pointer;
 }
+
 .img-box img{
 width:100%;
 height:100%;
 object-fit:cover;
 transition:0.4s;
 }
+
 .img-box:hover img{
 transform:scale(1.1);
 }
@@ -128,7 +155,10 @@ border-radius:15px;
 box-shadow:0 5px 20px rgba(0,0,0,0.2);
 display:none;
 }
-.cart.active{display:block;}
+
+.cart.active{
+display:block;
+}
 
 .cart-item{
 display:flex;
@@ -157,16 +187,28 @@ width:90%;
 max-width:400px;
 }
 
-/* CONTACT */
+/* CONTACT MODERNE */
 .contact{
 text-align:center;
 padding:20px;
 }
+
 .contact span{
 background:#000;
 color:#fff;
-padding:10px 15px;
+padding:10px 20px;
 border-radius:30px;
+font-weight:bold;
+}
+
+/* MESSAGE BAS */
+.footer-msg{
+text-align:center;
+padding:15px;
+background:#111;
+color:#fff;
+font-size:14px;
+letter-spacing:1px;
 }
 
 /* BUTTON */
@@ -200,9 +242,9 @@ border-radius:5px;
 </header>
 
 <div class="filter">
-<button onclick="filterProducts('all')" class="active">Tous</button>
-<button onclick="filterProducts('parfum')">Parfums</button>
-<button onclick="filterProducts('sac')">Sacs</button>
+<button onclick="filterProducts(event,'all')" class="active">Tous</button>
+<button onclick="filterProducts(event,'parfum')">Parfums</button>
+<button onclick="filterProducts(event,'sac')">Sacs</button>
 </div>
 
 <div class="products" id="products"></div>
@@ -222,8 +264,14 @@ border-radius:5px;
 <div class="modal-content" id="modal-content"></div>
 </div>
 
+<!-- CONTACT -->
 <div class="contact">
 <span>📞 +221 70 432 21 45</span>
+</div>
+
+<!-- MESSAGE BAS -->
+<div class="footer-msg">
+Veuillez passer votre commande sur ce numéro via WhatsApp ou appel direct.
 </div>
 
 <script>
@@ -232,7 +280,6 @@ const PHONE = "221704322145";
 
 /* PRODUITS */
 const PRODUCTS = [
-
 {name:"KANE Soft", price:10000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum", desc:"Parfum doux et élégant"},
 {name:"KANE Fresh", price:12000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum", desc:"Fraîcheur intense"},
 {name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Notes florales"},
@@ -250,7 +297,6 @@ const PRODUCTS = [
 {name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Fashion"},
 {name:"Sac chic", price:29000, img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg", cat:"sac", desc:"Élégant"},
 {name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Premium"}
-
 ];
 
 let filtered = [...PRODUCTS];
@@ -258,10 +304,9 @@ let cart = [];
 
 /* RENDER */
 function render(){
-const container = document.getElementById("products");
-let html = "";
+let html="";
 filtered.forEach(p=>{
-html += `
+html+=`
 <div class="card">
 <div class="img-box" onclick="showProduct('${p.name}')">
 <img src="${p.img}">
@@ -271,18 +316,16 @@ html += `
 <button onclick="add('${p.name}', ${p.price})">Ajouter</button>
 </div>`;
 });
-container.innerHTML = html;
+document.getElementById("products").innerHTML = html;
 }
 render();
 
 /* FILTER */
-function filterProducts(cat){
+function filterProducts(e,cat){
 document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("active"));
-event.target.classList.add("active");
+e.target.classList.add("active");
 
-if(cat==="all") filtered=[...PRODUCTS];
-else filtered=PRODUCTS.filter(p=>p.cat===cat);
-
+filtered = cat==="all" ? [...PRODUCTS] : PRODUCTS.filter(p=>p.cat===cat);
 render();
 }
 
@@ -293,11 +336,11 @@ filtered=PRODUCTS.filter(p=>p.name.toLowerCase().includes(q));
 render();
 }
 
-/* DETAIL */
+/* MODAL */
 function showProduct(name){
-const p = PRODUCTS.find(x=>x.name===name);
+let p=PRODUCTS.find(x=>x.name===name);
 document.getElementById("modal").style.display="flex";
-document.getElementById("modal-content").innerHTML = `
+document.getElementById("modal-content").innerHTML=`
 <h2>${p.name}</h2>
 <img src="${p.img}" style="width:100%">
 <p>${p.desc}</p>
@@ -306,13 +349,11 @@ document.getElementById("modal-content").innerHTML = `
 `;
 }
 
-document.getElementById("modal").onclick = function(){
-this.style.display="none";
-};
+document.getElementById("modal").onclick=()=>modal.style.display="none";
 
 /* PANIER */
 function add(name,price){
-let item = cart.find(i=>i.name===name);
+let item=cart.find(i=>i.name===name);
 if(item){item.qty++}
 else{cart.push({name,price,qty:1})}
 updateCart();
@@ -331,9 +372,9 @@ ${i.name} x${i.qty}
 </div>`;
 });
 
-document.getElementById("cart-items").innerHTML = html;
-document.getElementById("total").innerText = total;
-document.getElementById("count").innerText = cart.length;
+document.getElementById("cart-items").innerHTML=html;
+document.getElementById("total").innerText=total;
+document.getElementById("count").innerText=cart.length;
 }
 
 function removeItem(i){
@@ -358,6 +399,16 @@ window.open(`https://wa.me/${PHONE}?text=${msg}`);
 function toggleMenu(){
 document.getElementById("menu").classList.toggle("active");
 }
+
+/* CLOSE MENU */
+document.addEventListener("click",(e)=>{
+const menu=document.getElementById("menu");
+const btn=document.querySelector(".menu-btn");
+
+if(!menu.contains(e.target) && !btn.contains(e.target)){
+menu.classList.remove("active");
+}
+});
 
 </script>
 
