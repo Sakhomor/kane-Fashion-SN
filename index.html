@@ -234,29 +234,30 @@ const PHONE="221704322145";
 
 const PRODUCTS=[
 
+/* PARFUMS */
+{name:"KANE Soft", price:10000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum"},
+{name:"KANE Fresh", price:12000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum"},
+{name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
+{name:"KANE Intense", price:18000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum"},
+{name:"KANE Nuit", price:20000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
+{name:"KANE Gold", price:22000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum"},
+{name:"KANE Luxe", price:25000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
+
+/* SACS */
+{name:"Sac cuir noir", price:15000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+{name:"Sac cuir marron", price:18000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+{name:"Sac cuir luxe", price:20000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+{name:"Sac main élégant", price:22000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+{name:"Sac cuir simple", price:25000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac"},
+{name:"Sac moderne", price:27000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac"},
+{name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
+{name:"Sac chic", price:29000, img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg", cat:"sac"},
+{name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2)
+.jpg", cat:"sac"}
+
+];
 
 let filtered=[...PRODUCTS];
-‎/* PARFUMS */
-‎{name:"KANE Soft", price:10000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum"},
-‎{name:"KANE Fresh", price:12000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum"},
-‎{name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
-‎{name:"KANE Intense", price:18000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum"},
-‎{name:"KANE Nuit", price:20000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
-‎{name:"KANE Gold", price:22000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum"},
-‎{name:"KANE Luxe", price:25000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum"},
-‎
-‎/* SACS */
-‎{name:"Sac cuir noir", price:15000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-‎{name:"Sac cuir marron", price:18000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-‎{name:"Sac cuir luxe", price:20000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-‎{name:"Sac main élégant", price:22000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-‎{name:"Sac cuir simple", price:25000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac"},
-‎{name:"Sac moderne", price:27000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac"},
-‎{name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"},
-‎{name:"Sac chic", price:29000, img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg", cat:"sac"},
-‎{name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac"}
-‎
-‎];
 
 /* RENDER */
 function render(){
@@ -346,46 +347,9 @@ let msg="Commande:%0A";
 cart.forEach(i=>msg+=i.name+" x"+i.qty+"%0A");
 window.open(`https://wa.me/${PHONE}?text=${msg}`);
 }
-  
-‎async function handleSendChat(){
-‎  const input = el('#chatInputText'); const text = input.value.trim(); if(!text) return;
-‎  input.value = '';
-‎  addChatBubble('user', text);
-‎  // push to history
-‎  chatHistory.push({ role: 'user', content: text });
-‎  // language preference
-‎  const lang = el('#chatLang').value; // 'auto'|'fr'|'en'
-‎  const systemLangHint = lang === 'fr' ? 'Please respond in French.' : (lang === 'en' ? 'Please respond in English.' : '');
-‎  const messages = [{ role: 'system', content: CHAT_SYSTEM_PROMPT + (systemLangHint ? ' ' + systemLangHint : '') }, ...chatHistory];
-‎  addChatBubble('bot', '⏳ Réponse en cours...');
-‎  const reply = await callChatServer(messages);
-‎  // remove the temporary 'loading' bubble (last bot one)
-‎  const body = el('#chatBody');
-‎  const last = body.querySelector('.msg-bot:last-child');
-‎  if(last && last.textContent === '⏳ Réponse en cours...') last.remove();
-‎  addChatBubble('bot', reply);
-‎  // add assistant to history
-‎  chatHistory.push({ role: 'assistant', content: reply });
-‎}
-‎
-‎/* Chat toggle */
-‎el('#toggleChatBtn').addEventListener('click', ()=> {
-‎  el('#chatWindow').classList.toggle('open');
-‎  // focus input when opening
-‎  setTimeout(()=> el('#chatInputText').focus(), 200);
-‎});
-‎el('#closeChatBtn').addEventListener('click', ()=> el('#chatWindow').classList.remove('open'));
-‎el('#sendChatBtn').addEventListener('click', handleSendChat);
-‎el('#chatInputText').addEventListener('keydown', (e)=>{ if(e.key==='Enter') handleSendChat(); });
-‎
-‎/* Newsletter */
-‎function subscribeNewsletter(){
-‎  const email = el('#newsletterEmail').value.trim();
-‎  if(!email || !email.includes('@')){ alert('Entrer un email valide'); return; }
-‎  if(NEWS.includes(email)){ showToast('Déjà inscrit'); return; }
-‎  NEWS.push(email); write(KEY_NEWS, NEWS); showToast('✅ Inscription confirmée');}
+
 </script>
 
 </body>
-</html>
+  </html>
    
