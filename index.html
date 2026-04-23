@@ -3,84 +3,132 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Catalogue - KANE LUXURY</title>
+<title>KANE FASHION</title>
 
 <style>
-:root{--gold:#D4AF37;}
+:root{--gold:#C9A227;}
 
 body{
 margin:0;
 font-family:Arial;
-background:#000;
-color:#fff;
+background:#f8f8f8;
 }
 
 /* HEADER */
 header{
-background:#111;
+position:sticky;
+top:0;
+background:#fff;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 30px;
+padding:10px 20px;
+border-bottom:1px solid #ddd;
+z-index:1000;
 }
 
-.logo img{height:90px;}
+.logo img{
+height:65px;
+}
+
+/* MENU */
+.menu-btn{
+font-size:25px;
+cursor:pointer;
+display:none;
+}
+
+nav{
+display:flex;
+gap:15px;
+}
 
 nav a{
-color:var(--gold);
-margin:0 10px;
 text-decoration:none;
+color:#000;
 }
 
-/* CONTROLS */
-.controls{
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-padding:20px;
-justify-content:center;
+@media(max-width:768px){
+nav{
+position:fixed;
+top:0;
+right:0;
+width:70%;
+height:100%;
+background:#fff;
+flex-direction:column;
+padding:30px;
+transform:translateX(100%);
+transition:0.4s;
+}
+nav.active{
+transform:translateX(0);
+}
+.menu-btn{display:block;}
 }
 
-.controls input, .controls select{
+/* SEARCH */
+.search{
 padding:8px;
+border-radius:20px;
+border:1px solid #ccc;
+}
+
+/* FILTER */
+.filter{
+text-align:center;
+margin:10px;
+}
+
+.filter button{
+padding:8px 15px;
+margin:5px;
 border:none;
-border-radius:5px;
+border-radius:20px;
+cursor:pointer;
+background:#eee;
+}
+
+.filter .active{
+background:var(--gold);
+color:#fff;
 }
 
 /* PRODUCTS */
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:25px;
+grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+gap:20px;
 padding:20px;
 }
 
 .card{
-border:1px solid var(--gold);
-padding:15px;
-text-align:center;
+background:#fff;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
 transition:0.3s;
 }
 
 .card:hover{
-transform:scale(1.05);
-box-shadow:0 0 20px var(--gold);
+transform:translateY(-8px);
 }
 
-.card img{
-width:100%;
+.img-box{
 height:220px;
-object-fit:cover;
+overflow:hidden;
+cursor:pointer;
 }
 
-.card h3{color:var(--gold);}
+.img-box img{
+width:100%;
+height:100%;
+object-fit:cover;
+transition:0.4s;
+}
 
-/* BUTTON */
-button{
-background:var(--gold);
-border:none;
-padding:8px 12px;
-cursor:pointer;
+.img-box:hover img{
+transform:scale(1.1);
 }
 
 /* PANIER */
@@ -89,31 +137,88 @@ position:fixed;
 bottom:20px;
 right:20px;
 background:var(--gold);
-color:#000;
+color:#fff;
 padding:15px;
 border-radius:50%;
 cursor:pointer;
+font-size:18px;
 }
 
 .cart{
 position:fixed;
 bottom:80px;
 right:20px;
-background:#111;
+background:#fff;
+width:280px;
 padding:15px;
-width:260px;
+border-radius:15px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
 display:none;
-border:1px solid var(--gold);
 }
 
-.cart.active{display:block;}
+.cart.active{
+display:block;
+}
 
-/* FOOTER */
-.footer{
+.cart-item{
+display:flex;
+justify-content:space-between;
+margin:5px 0;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.7);
+display:none;
+justify-content:center;
+align-items:center;
+}
+
+.modal-content{
+background:#fff;
+padding:20px;
+border-radius:10px;
+width:90%;
+max-width:400px;
+}
+
+/* CONTACT MODERNE */
+.contact{
 text-align:center;
 padding:20px;
+}
+
+.contact span{
+background:#000;
+color:#fff;
+padding:10px 20px;
+border-radius:30px;
+font-weight:bold;
+}
+
+/* MESSAGE BAS */
+.footer-msg{
+text-align:center;
+padding:15px;
 background:#111;
-color:#aaa;
+color:#fff;
+font-size:14px;
+letter-spacing:1px;
+}
+
+/* BUTTON */
+button{
+background:var(--gold);
+border:none;
+padding:6px 10px;
+color:#fff;
+cursor:pointer;
+border-radius:5px;
 }
 </style>
 </head>
@@ -125,28 +230,21 @@ color:#aaa;
 <img src="https://www.image2url.com/r2/default/images/1776857636247-0a2140dc-2feb-402e-a1e8-8b2294630ffb.png">
 </div>
 
-<nav>
-<a href="index.html">Accueil</a>
-<a href="#">Catalogue</a>
+<div class="menu-btn" onclick="toggleMenu()">☰</div>
+
+<nav id="menu">
+<a href="#">Accueil</a>
+<a href="#">Produits</a>
 <a href="#">Contact</a>
 </nav>
+
+<input class="search" placeholder="Rechercher..." oninput="search(this.value)">
 </header>
 
-<!-- CONTROLS -->
-<div class="controls">
-<input type="text" placeholder="Rechercher..." oninput="search(this.value)">
-
-<select onchange="filterCat(this.value)">
-<option value="all">Toutes catégories</option>
-<option value="parfum">Parfums</option>
-<option value="sac">Sacs</option>
-</select>
-
-<select onchange="sortPrice(this.value)">
-<option value="default">Trier</option>
-<option value="asc">Prix croissant</option>
-<option value="desc">Prix décroissant</option>
-</select>
+<div class="filter">
+<button onclick="filterProducts(event,'all')" class="active">Tous</button>
+<button onclick="filterProducts(event,'parfum')">Parfums</button>
+<button onclick="filterProducts(event,'sac')">Sacs</button>
 </div>
 
 <div class="products" id="products"></div>
@@ -161,29 +259,48 @@ color:#aaa;
 <button onclick="order()">Commander</button>
 </div>
 
-<div class="footer">
-Commande WhatsApp : +221 70 432 21 45
+<!-- MODAL -->
+<div class="modal" id="modal">
+<div class="modal-content" id="modal-content"></div>
+</div>
+
+<!-- CONTACT -->
+<div class="contact">
+<span>📞 +221 70 432 21 45</span>
+</div>
+
+<!-- MESSAGE BAS -->
+<div class="footer-msg">
+Veuillez passer votre commande sur ce numéro via WhatsApp ou appel direct.
 </div>
 
 <script>
 
-const PHONE="221704322145";
+const PHONE = "221704322145";
 
-/* PRODUITS COMPLETS */
-let PRODUCTS=[
+/* PRODUITS */
+const PRODUCTS = [
+{name:"KANE Soft", price:10000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum", desc:"Parfum doux et élégant"},
+{name:"KANE Fresh", price:12000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum", desc:"Fraîcheur intense"},
+{name:"KANE Floral", price:15000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Notes florales"},
+{name:"KANE Intense", price:18000, img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg", cat:"parfum", desc:"Parfum puissant"},
+{name:"KANE Nuit", price:20000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Mystérieux"},
+{name:"KANE Gold", price:22000, img:"https://i.postimg.cc/prPKTG50/images.jpg", cat:"parfum", desc:"Luxe"},
+{name:"KANE Luxe", price:25000, img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg", cat:"parfum", desc:"Premium"},
 
-{name:"KANE Soft",price:10000,cat:"parfum",img:"https://i.postimg.cc/vmHBcJ0v/telechargement-(5).jpg",desc:"Parfum doux"},
-{name:"KANE Fresh",price:12000,cat:"parfum",img:"https://i.postimg.cc/prPKTG50/images.jpg",desc:"Fraîcheur intense"},
-{name:"KANE Floral",price:15000,cat:"parfum",img:"https://i.postimg.cc/bN7N9G3r/telechargement-(7).jpg",desc:"Notes florales"},
-{name:"KANE Gold",price:22000,cat:"parfum",img:"https://i.postimg.cc/prPKTG50/images.jpg",desc:"Luxe ultime"},
-
-{name:"Sac cuir noir",price:15000,cat:"sac",img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg",desc:"Cuir noir"},
-{name:"Sac cuir luxe",price:20000,cat:"sac",img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg",desc:"Premium"},
-{name:"Sac chic",price:29000,cat:"sac",img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg",desc:"Élégant"}
+{name:"Sac cuir noir", price:15000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Cuir noir"},
+{name:"Sac cuir marron", price:18000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Classique"},
+{name:"Sac cuir luxe", price:20000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Luxe"},
+{name:"Sac main élégant", price:22000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Chic"},
+{name:"Sac cuir simple", price:25000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac", desc:"Simple"},
+{name:"Sac moderne", price:27000, img:"https://i.postimg.cc/G3SkrQht/telechargement-(8).jpg", cat:"sac", desc:"Moderne"},
+{name:"Sac fashion", price:28000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Fashion"},
+{name:"Sac chic", price:29000, img:"https://i.postimg.cc/RhvbBTSm/telechargement-(9).jpg", cat:"sac", desc:"Élégant"},
+{name:"Sac premium", price:30000, img:"https://i.postimg.cc/mgrfMTGb/images-(2).jpg", cat:"sac", desc:"Premium"}
 ];
 
-let filtered=[...PRODUCTS];
-let cart=[];
+let filtered = [...PRODUCTS];
+let cart = [];
 
 /* RENDER */
 function render(){
@@ -191,16 +308,26 @@ let html="";
 filtered.forEach(p=>{
 html+=`
 <div class="card">
+<div class="img-box" onclick="showProduct('${p.name}')">
 <img src="${p.img}">
+</div>
 <h3>${p.name}</h3>
-<p>${p.desc}</p>
 <p>${p.price} FCFA</p>
-<button onclick="add('${p.name}',${p.price})">Ajouter</button>
+<button onclick="add('${p.name}', ${p.price})">Ajouter</button>
 </div>`;
 });
-document.getElementById("products").innerHTML=html;
+document.getElementById("products").innerHTML = html;
 }
 render();
+
+/* FILTER */
+function filterProducts(e,cat){
+document.querySelectorAll(".filter button").forEach(b=>b.classList.remove("active"));
+e.target.classList.add("active");
+
+filtered = cat==="all" ? [...PRODUCTS] : PRODUCTS.filter(p=>p.cat===cat);
+render();
+}
 
 /* SEARCH */
 function search(q){
@@ -209,19 +336,20 @@ filtered=PRODUCTS.filter(p=>p.name.toLowerCase().includes(q));
 render();
 }
 
-/* FILTER */
-function filterCat(cat){
-if(cat==="all") filtered=[...PRODUCTS];
-else filtered=PRODUCTS.filter(p=>p.cat===cat);
-render();
+/* MODAL */
+function showProduct(name){
+let p=PRODUCTS.find(x=>x.name===name);
+document.getElementById("modal").style.display="flex";
+document.getElementById("modal-content").innerHTML=`
+<h2>${p.name}</h2>
+<img src="${p.img}" style="width:100%">
+<p>${p.desc}</p>
+<p>${p.price} FCFA</p>
+<button onclick="add('${p.name}', ${p.price})">Ajouter</button>
+`;
 }
 
-/* SORT */
-function sortPrice(type){
-if(type==="asc") filtered.sort((a,b)=>a.price-b.price);
-if(type==="desc") filtered.sort((a,b)=>b.price-a.price);
-render();
-}
+document.getElementById("modal").onclick=()=>modal.style.display="none";
 
 /* PANIER */
 function add(name,price){
@@ -232,14 +360,26 @@ updateCart();
 }
 
 function updateCart(){
-let html="",total=0;
+let html="";
+let total=0;
+
 cart.forEach((i,index)=>{
 total+=i.price*i.qty;
-html+=`${i.name} x${i.qty}<br>`;
+html+=`
+<div class="cart-item">
+${i.name} x${i.qty}
+<button onclick="removeItem(${index})">❌</button>
+</div>`;
 });
+
 document.getElementById("cart-items").innerHTML=html;
 document.getElementById("total").innerText=total;
 document.getElementById("count").innerText=cart.length;
+}
+
+function removeItem(i){
+cart.splice(i,1);
+updateCart();
 }
 
 function toggleCart(){
@@ -249,9 +389,26 @@ document.getElementById("cart").classList.toggle("active");
 /* WHATSAPP */
 function order(){
 let msg="Commande:%0A";
-cart.forEach(i=>msg+=i.name+" x"+i.qty+"%0A");
+cart.forEach(i=>{
+msg+=i.name+" x"+i.qty+"%0A";
+});
 window.open(`https://wa.me/${PHONE}?text=${msg}`);
 }
+
+/* MENU */
+function toggleMenu(){
+document.getElementById("menu").classList.toggle("active");
+}
+
+/* CLOSE MENU */
+document.addEventListener("click",(e)=>{
+const menu=document.getElementById("menu");
+const btn=document.querySelector(".menu-btn");
+
+if(!menu.contains(e.target) && !btn.contains(e.target)){
+menu.classList.remove("active");
+}
+});
 
 </script>
 
